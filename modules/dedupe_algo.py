@@ -4,6 +4,7 @@ import re
 import pandas as pd
 from unidecode import unidecode
 from preprocessing import Preprocessing
+import time
 
 def leveenshtien_calculator(str1, str2, weightage):
     score = jellyfish.levenshtein_distance(str1, str2)
@@ -22,13 +23,12 @@ def match_calculator(str1,str2, weightage):
     return score >= weightage
 
 
-def preProcess(column_ls):
-    data = []
-    for i in range(len(column_ls)):
-        column = column_ls[i]
-        column = column.lower()
-        data.append(re.sub('  ', ' ', column))
-    return data
+def preProcess(column):
+    try:
+            column = column.lower()
+            return (re.sub('  ', ' ', column))
+    except:
+        pass
 
 def readData(dataframe, column):
     df_col = dataframe[column]
@@ -37,35 +37,58 @@ def readData(dataframe, column):
     return data
 
 
-def is_duplicate(database, r_data, param, weightage):
-    for i in range(0, len(r_data)):
-        for columns in database:
+def is_duplicate(database, incoming_df, column_name, param, weightage):
+    new_entry_doctor_id = []
+    database_doctor_id = []
+    for i in range(0, len(incoming_df[column_name])):
+        for j in range(0, len(database[column_name])):
             if "leven" in param:
-                is_check = leveenshtien_calculator(r_data[i].lower(), columns, weightage)
+                is_check = leveenshtien_calculator(preProcess(incoming_df[column_name][i]), preProcess(database[column_name][j]), weightage)
                 if is_check:
-                    print("New Entry:- ", r_data[i].lower(), ", Database Entry:- ", columns)
-            if "jaro" in  param:
-                is_check = jaro_calculator(r_data[i], columns, weightage)
+                    new_entry_doctor_id.append(incoming_df['doctor_id'][i])
+                    database_doctor_id.append(database['doctor_id'][j])
+                    # print("New Entry:- ", incoming_df['doctor_id'][i], ", Database Entry:- ", database['doctor_id'][j])
+                    # print("New Entry:- ", incoming_df[column_name][i], ", Database Entry:- ", database[column_name][j])
+                    # print("New Entry:- ", incoming_df['locality'][i], ", Database Entry:- ", database['locality'][j])
+                    # print("New Entry:- ", incoming_df['locality_latitude'][i], ", Database Entry:- ", database['locality_latitude'][j])
+                    # print("New Entry:- ", incoming_df['locality_longitude'][i], ", Database Entry:- ", database['locality_longitude'][j])
+
+            if "jaro" in param:
+                is_check = jaro_calculator(incoming_df[i], database[j], weightage)
                 if is_check:
-                    print(r_data[i], columns)
+                    print(incoming_df[i], database[j])
             if "damerau" in  param:
-                is_check = damerau_calculator(r_data[i], columns, weightage)
+                is_check = damerau_calculator(incoming_df[i], database[j], weightage)
                 if is_check:
-                    print(r_data[i], columns)
+                    print(incoming_df[i], database[j])
             if "match" in  param:
-                is_check = match_calculator(r_data[i], columns, weightage)
+                is_check = match_calculator(incoming_df[i], database[j], weightage)
                 if is_check:
-                    print(r_data[i], columns)
+                    print(incoming_df[i], database[j])
+    
+    return (new_entry_doctor_id, database_doctor_id)
 
-database = pd.read_csv('F:\ps10_pro_coders\Dataset\Doctors_Data_Preprocessed.csv')
+database = pd.read_csv(r'E:\bajaj\New folder\ps10_pro_coders\Dataset\Doctors_Data_Preprocessed.csv')
+print(database.tail(10))
+print()
 
-def deDupeAlgo(df, col_weights):
-    incoming_data = Preprocessing(df)
+def deDupeAlgo(incoming_data, col_weights):
+    # incoming_data = Preprocessing(df)
     print(incoming_data)
+    duplicate_data = {}
+    
     for columns, weights in col_weights.items():
-        data = readData(database, columns)
-        is_duplicate(data[columns], incoming_data[columns], 'leven', 4)
+        new_entry_doctor_id, database_doctor_id = is_duplicate(database, incoming_data, columns, 'leven', 3)
+        
+        if len(new_entry_doctor_id) != 0:
+            duplicate_data['DataBaseEntry'] = database_doctor_id
+            duplicate_data['NewEntry'] = new_entry_doctor_id
+    
+    return duplicate_data
+
 
 # deDupeAlgo(incoming_data, {"doctor_name": 4})
-df = pd.read_csv("F:\ps10_pro_coders\Dataset\Doctor's Data for dedupe_v2.csv")
-deDupeAlgo(df, {"speciality_stream": 4})
+s_time = time.time()
+df = pd.read_csv(r"E:\bajaj\New folder\ps10_pro_coders\Dataset\mock_data.csv")
+print(deDupeAlgo(df, {"doctor_name": 4}))
+print(time.time() - s_time)
