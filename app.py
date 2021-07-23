@@ -1,7 +1,7 @@
 from streamlit import *
 import pandas as pd
 import numpy as np
-from Preprocessing_Data.preprocessing import Preprocessing
+from modules.preprocessing import Preprocessing
 
 
 def get_features():
