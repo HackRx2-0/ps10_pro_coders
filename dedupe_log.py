@@ -1,4 +1,4 @@
-from k_algo import is_duplicate, readData
+from modules.k_algo import is_duplicate, readData
 import logging
 import time
 
@@ -20,21 +20,21 @@ def edit_log(string):
 
 def calTimeLeven():
     start_time = time.time()
-    is_duplicate(data, "leven")
+    is_duplicate(data,['abhay sir'] ,"leven")
     end_time = time.time()
     time_taken = str(round(end_time - start_time, 4))
     edit_log("Time Taken by leveenshtien:- " + time_taken)
 
 def calTimeDamerau():
     start_time = time.time()
-    is_duplicate(data, "damerau")
+    is_duplicate(data,['abhay sir'] , "damerau")
     end_time = time.time()
     time_taken = str(round(end_time - start_time, 4))
     edit_log("Time Taken by damerau:- " + time_taken)
 
 def calTimejaro():
     start_time = time.time()
-    is_duplicate(data, "jaro")
+    is_duplicate(data,['abhay sir'] , "jaro")
     end_time = time.time()
     time_taken = str(round(end_time - start_time, 4))
     edit_log("Time Taken by jaro:- " + time_taken)
@@ -42,7 +42,7 @@ def calTimejaro():
 
 def calTimematch():
     start_time = time.time()
-    is_duplicate(data, "match")
+    is_duplicate(data,['abhay sir'] , "match")
     end_time = time.time()
     time_taken = str(round(end_time - start_time, 4))
     edit_log("Time Taken by match:- " + time_taken)

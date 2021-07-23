@@ -44,7 +44,19 @@ def is_duplicate(database, r_data, param):
     for i in range(0, len(r_data)):
         for j in range(i + 1, len(database) + 1):
             if "leven" in  param:
-                is_check = leveenshtien_calculator(r_data[i], database[j]['name'], 2)
+                is_check = leveenshtien_calculator(r_data[i], database[j]['name'], 4)
+                if is_check:
+                    print(r_data[i], database[j]['name'])
+            if "jaro" in  param:
+                is_check = jaro_calculator(r_data[i], database[j]['name'])
+                if is_check:
+                    print(r_data[i], database[j]['name'])
+            if "damerau" in  param:
+                is_check = damerau_calculator(r_data[i], database[j]['name'])
+                if is_check:
+                    print(r_data[i], database[j]['name'])
+            if "match" in  param:
+                is_check = match_calculator(r_data[i], database[j]['name'])
                 if is_check:
                     print(r_data[i], database[j]['name'])
 
