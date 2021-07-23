@@ -42,6 +42,7 @@ def merge_same_doctors_data(df , new_df):
 
 def Preprocessing(path):
     x_df = pd.read_csv(path)
+    x_df = x_df.drop_duplicates(keep=False)
 
     new_df = convert_list_of_dics_to_df(x_df , 'qualifications')
     x_df = merge_same_doctors_data(x_df , new_df)
@@ -51,3 +52,6 @@ def Preprocessing(path):
 
     x_df.drop(['qualifications' , 'specialties'], axis = 1 , inplace = True)
     return x_df
+
+# path = '../Dataset/Doctors_Data.csv'
+# print(Preprocessing(path))
