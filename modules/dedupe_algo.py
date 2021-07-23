@@ -5,6 +5,8 @@ import pandas as pd
 from unidecode import unidecode
 from preprocessing import Preprocessing
 import time
+from clusters import get_clusters, match_score
+
 
 def leveenshtien_calculator(str1, str2, weightage):
     score = jellyfish.levenshtein_distance(str1, str2)
@@ -25,8 +27,8 @@ def match_calculator(str1,str2, weightage):
 
 def preProcess(column):
     try:
-            column = column.lower()
-            return (re.sub('  ', ' ', column))
+        column = column.lower()
+        return (re.sub('  ', ' ', column))
     except:
         pass
 
@@ -84,11 +86,23 @@ def deDupeAlgo(incoming_data, col_weights):
             duplicate_data['DataBaseEntry'] = database_doctor_id
             duplicate_data['NewEntry'] = new_entry_doctor_id
     
+    length = len(duplicate_data["DataBaseEntry"])
+    print("-"*50)
+    
+    for i in range(length):
+        ids_database = duplicate_data["DataBaseEntry"][i]
+        ids_newentry = duplicate_data["NewEntry"][i]
+        # Get match score
+        m_score = match_score(get_clusters(ids_database, database), get_clusters(ids_newentry, incoming_data))
+        duplicate_data["DataBaseEntry"][i] = (duplicate_data["DataBaseEntry"][i], m_score)
+        duplicate_data["NewEntry"][i] = (duplicate_data["NewEntry"][i], m_score)
+        # break
+    
     return duplicate_data
 
 
 # deDupeAlgo(incoming_data, {"doctor_name": 4})
 s_time = time.time()
 df = pd.read_csv(r"E:\bajaj\New folder\ps10_pro_coders\Dataset\mock_data.csv")
-print(deDupeAlgo(df, {"doctor_name": 4}))
+print(deDupeAlgo(df, {"doctor_name": 4}))                                         #Format == "data name" => [(doctor_id, match_score), ...]
 print(time.time() - s_time)
