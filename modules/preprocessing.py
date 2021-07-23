@@ -14,7 +14,6 @@ def convert_list_of_dics_to_df(df , col_name):
     
 	for doctor_id , data in zip(doctor_id , col_name):
 		a = pd.DataFrame(eval(data))
-        
 		a.insert(0, 'doctor_id', doctor_id)
 		dfs.append(a)
 	merged = pd.concat(dfs)
@@ -54,8 +53,16 @@ def Preprocessing(x_df):
 
 
     x_df.drop(['qualifications' , 'specialties'], axis = 1 , inplace = True)
+    x_df.dropna(thresh=0.1 * len(x_df),axis = 'columns',inplace=True)
+
     return x_df
 
+def set_doctor_id_as_index(df):
+    df.set_index('doctor_id' , inplace = True)
+    return df
+
+
+
 # path = '../Dataset/Doctors_Data.csv'
-# df = Preprocessing(path)
+# df = Preprocessing(pd.read_csv(path))
 # df.to_csv('../Dataset/Doctors_Data_Preprocessed.csv')
