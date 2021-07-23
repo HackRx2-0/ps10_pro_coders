@@ -1,6 +1,7 @@
 from streamlit import *
 import pandas as pd
 import numpy as np
+from modules.dedupe_algo import deDupeAlgo
 
 def get_features():
     data = pd.read_csv('Dataset/Doctors_Data_Preprocessed.csv')
@@ -39,6 +40,7 @@ for i in range(8):
     text("")
 
 if df is not None:
-    button("find Duplicates on bases of incoming data",on_click="")
+    if button("find Duplicates on bases of incoming data"):
+        deDupeAlgo(df,dic)
 
-button("Find Duplicate in Database")
+# button("Find Duplicate in Database")
