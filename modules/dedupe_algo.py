@@ -56,9 +56,9 @@ def is_duplicate(database, r_data, param, weightage):
                 if is_check:
                     print(r_data[i], columns)
 
-def deDupeAlgo(df):
-    data = readData(df, 'doctor_name')
-    is_duplicate(data['doctor_name'], ['Arunesh Dutt Upadhyay'], 'leven', 4)
 
-df = Preprocessing(path = "../Dataset/Doctors_Data.csv")
-deDupeAlgo(df)
+def deDupeAlgo(df,col_weight):
+    for col,value in col_weight:
+        data = readData(df, col)
+        is_duplicate(data[col], "", 'leven', 4)
+

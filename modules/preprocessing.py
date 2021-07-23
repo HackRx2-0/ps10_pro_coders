@@ -58,4 +58,5 @@ def Preprocessing(path):
     return x_df
 
 path = '../Dataset/Doctors_Data.csv'
-print(Preprocessing(path))
+df = Preprocessing(path)
+df.to_csv('../Dataset/Doctors_Data_Preprocessed.csv')
