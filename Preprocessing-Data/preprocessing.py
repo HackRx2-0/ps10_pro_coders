@@ -22,7 +22,7 @@ def convert_list_of_dics_to_df(df , col_name):
 
 
 
-def test(df , new_df):
+def merge_same_doctors_data(df , new_df):
 
     new_df = new_df.astype(str)
 
@@ -44,9 +44,9 @@ def test(df , new_df):
 x_df = pd.read_csv("../Dataset/Doctors_Data.csv")
 
 new_df = convert_list_of_dics_to_df(x_df , 'qualifications')
-x_df = test(x_df , new_df)
+x_df = merge_same_doctors_data(x_df , new_df)
 new_df = convert_list_of_dics_to_df(x_df , 'specialties')
-x_df = test(x_df , new_df)
+x_df = merge_same_doctors_data(x_df , new_df)
 
 
 x_df.drop(['qualifications' , 'specialties'], axis = 1 , inplace = True)
