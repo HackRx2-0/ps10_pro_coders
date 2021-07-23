@@ -43,9 +43,8 @@ def merge_same_doctors_data(df , new_df):
     return df
 
 
-def Preprocessing(path):
-    x_df = pd.read_csv(path)
-    x_df = x_df.drop_duplicates(keep="first")
+def Preprocessing(x_df):
+    x_df = x_df.drop_duplicates(keep=False)
 
     new_df = convert_list_of_dics_to_df(x_df , 'qualifications')
     x_df = merge_same_doctors_data(x_df , new_df)
@@ -64,7 +63,6 @@ def set_doctor_id_as_index(df):
 
 
 
-path = '../Dataset/Doctors_Data.csv'
-df = Preprocessing(path)
-df.to_csv('../Dataset/Doctors_Data_Preprocessed.csv')
-df.tail(10).to_csv('../Dataset/mock_data.csv')
+# path = '../Dataset/Doctors_Data.csv'
+# df = Preprocessing(pd.read_csv(path))
+# df.to_csv('../Dataset/Doctors_Data_Preprocessed.csv')

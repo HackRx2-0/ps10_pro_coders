@@ -1,6 +1,7 @@
 import jellyfish
 import csv
 import re
+import pandas as pd
 from unidecode import unidecode
 from preprocessing import Preprocessing
 
@@ -56,9 +57,15 @@ def is_duplicate(database, r_data, param, weightage):
                 if is_check:
                     print(r_data[i], columns)
 
+database = pd.read_csv('F:\ps10_pro_coders\Dataset\Doctors_Data_Preprocessed.csv')
 
-def deDupeAlgo(df,col_weight):
-    for col,value in col_weight:
-        data = readData(df, col)
-        is_duplicate(data[col], "", 'leven', 4)
+def deDupeAlgo(df, col_weights):
+    incoming_data = Preprocessing(df)
+    print(incoming_data)
+    for columns, weights in col_weights.items():
+        data = readData(database, columns)
+        is_duplicate(data[columns], incoming_data[columns], 'leven', 4)
 
+# deDupeAlgo(incoming_data, {"doctor_name": 4})
+df = pd.read_csv("F:\ps10_pro_coders\Dataset\Doctor's Data for dedupe_v2.csv")
+deDupeAlgo(df, {"speciality_stream": 4})
