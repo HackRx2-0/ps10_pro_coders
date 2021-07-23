@@ -32,7 +32,11 @@ def merge_same_doctors_data(df , new_df):
         if col != 'doctor_id':
             for d in new_df.groupby('doctor_id')[col].apply(' -#- '.join):
                 lis.append(d)
-            t = pd.DataFrame(lis)[0].str.split('-#-' , expand = True).rename({0 : '0' + col , 1 : '1' + col , 2 : '2' + col} , axis = 'columns')
+            t = pd.DataFrame(lis)[0].str.split('-#-' , expand = True)
+            dic = {}
+            for i in range(t.shape[1]):
+                dic[i] = col + '_' + str(i + 1)
+            t = t.rename(dic , axis = 'columns')
             dfs.append(t)
     wow = pd.concat(dfs , axis = 'columns')
     wow.insert(0 , 'doctor_id' , df['doctor_id'])
@@ -53,5 +57,5 @@ def Preprocessing(path):
     x_df.drop(['qualifications' , 'specialties'], axis = 1 , inplace = True)
     return x_df
 
-# path = '../Dataset/Doctors_Data.csv'
-# print(Preprocessing(path))
+path = '../Dataset/Doctors_Data.csv'
+print(Preprocessing(path))
