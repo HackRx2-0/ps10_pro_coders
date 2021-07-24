@@ -11,18 +11,19 @@ set_option('deprecation.showfileUploaderEncoding', False)
 
 title('De-Dupe Engine')
 
-data = file_uploader("", type=["csv"])  # Loading the dataset
+data2 = file_uploader("", type=["csv"])  # Loading the dataset
 df = None
-if data is not None:  # Here if block runs only when user gives dataset
+if data2 is not None:  # Here if block runs only when user gives dataset
 
     # Loading the dataset using pandas
-    df = pd.read_csv(data)
+    df = pd.read_csv(data2)
 
-text("OR")
+# text("OR")
 
-real_Df = text_input("Enter Real Time data : ")
+# real_Df = text_input("Enter Real Time data : ")
 
 org_data = get_features()  # Getting the features from the dataset
+del org_data['Unnamed: 0']
 lis = org_data.columns
 
 title("Dataset")
@@ -38,9 +39,21 @@ for i in range(8):
         text("")
         k += 1
     text("")
+ndic = {}
+ndic['doctor_name'] = dic['doctor_name']
+ndic['locality'] = dic['locality']
+ndic['clinic_name'] = dic['clinic_name']
+duplicate_data = None
 
+d1,d2 = None,None
 if df is not None:
     if button("find Duplicates on bases of incoming data"):
-        deDupeAlgo(df,dic)
+        d1,d2 = deDupeAlgo(df,ndic)
+
+if d1 is not None:
+    col1,col2 = beta_columns(2)
+    del d1['Unnamed: 0']
+    col1.dataframe(d1)
+    col2.dataframe(d2)
 
 # button("Find Duplicate in Database")
