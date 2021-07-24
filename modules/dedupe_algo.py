@@ -50,6 +50,7 @@ def is_duplicate(database, incoming_df, column_name, param, weightage):
     for i in range(0, len(incoming_df[column_name])):
         for j in range(0, len(database[column_name])):
             if "leven" in param:
+                is_check = False
                 mypre = preProcess(incoming_df[column_name][i])
                 mypre2 = preProcess(database[column_name][j])
                 if mypre != "INT" and mypre2 != "INT":
@@ -107,12 +108,12 @@ print(database.tail(10))
 print()
 
 def deDupeAlgo(incoming_data, col_weights):
-    incoming_data = Preprocessing(incoming_data)
+    # incoming_data = Preprocessing(incoming_data)
     print(incoming_data)
     duplicate_data = {}
     
     for columns, weights in col_weights.items():
-        new_entry_doctor_id, database_doctor_id = is_duplicate(database, incoming_data, columns, 'leven', 3)
+        new_entry_doctor_id, database_doctor_id = is_duplicate(database, incoming_data, columns, 'leven', 1)
         
         if len(new_entry_doctor_id) != 0:
             duplicate_data['DataBaseEntry'] = database_doctor_id
@@ -136,8 +137,14 @@ def deDupeAlgo(incoming_data, col_weights):
     #     # break
     d1 = pd.concat(d1)
     d2 = pd.concat(d2)
+    d1 = d1.drop_duplicates(subset='doctor_name', keep="first")
+    d2 = d2.drop_duplicates(subset='doctor_name', keep="first")
     print(d1.head())
-    return d1, d2
+    return d1,d2
+    # if list(col_weights.keys())[0] != 'doctor_name':
+    #     return d1[['doctor_name',list(col_weights.keys())[0]]], d2[['doctor_name',list(col_weights.keys())[0]]]
+    # else:
+    #     return d1['doctor_name'], d2['doctor_name']
 
 
 # deDupeAlgo(incoming_data, {"doctor_name": 4})
